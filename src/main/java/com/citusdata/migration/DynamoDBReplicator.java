@@ -189,6 +189,11 @@ public class DynamoDBReplicator {
 
 			for(String dynamoTableName : dynamoTableNames) {
 				String postgresTableName = tableLookup.get(dynamoTableName);
+				// If we don't have a postgres table name,
+				// use the dynamo table name
+				if (postgresTableName.isEmpty()) {
+					postgresTableName = dynamoTableName;
+				}
 				DynamoDBTableReplicator replicator = new DynamoDBTableReplicator(
 						dynamoDBClient, streamsClient, credentialsProvider, executor, emitter, dynamoTableName, postgresTableName);
 				replicator.setAddColumnEnabled(true);
