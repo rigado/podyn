@@ -201,7 +201,7 @@ public class DynamoDBReplicator {
 
 			if (replicateSchema) {
 				for(DynamoDBTableReplicator replicator : replicators) {
-					LOG.info(String.format("Constructing table schema for table %s", replicator.dynamoTableName));
+					LOG.info(String.format("Constructing table schema for dynamo table %s into postgres table %s", replicator.dynamoTableName, replicator.postgresTableName));
 
 					replicator.replicateSchema();
 				}
