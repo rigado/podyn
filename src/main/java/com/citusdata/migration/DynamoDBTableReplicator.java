@@ -85,6 +85,7 @@ public class DynamoDBTableReplicator {
 
 	final TableEmitter emitter;
 	final String dynamoTableName;
+	final String postgresTableName;
 
 	boolean addColumnsEnabled;
 	boolean useCitus;
@@ -99,13 +100,15 @@ public class DynamoDBTableReplicator {
 			AWSCredentialsProvider awsCredentialsProvider,
 			ExecutorService executorService,
 			TableEmitter emitter,
-			String tableName) throws SQLException {
+			String dynamoTableName,
+			String postgresTableName) throws SQLException {
 		this.dynamoDBClient = dynamoDBClient;
 		this.streamsClient = streamsClient;
 		this.awsCredentialsProvider = awsCredentialsProvider;
 		this.executor = executorService;
 		this.emitter = emitter;
-		this.dynamoTableName = tableName;
+		this.dynamoTableName = dynamoTableName;
+		this.postgresTableName = postgresTableName;
 		this.addColumnsEnabled = true;
 		this.useCitus = false;
 		this.useLowerCaseColumnNames = false;
@@ -146,7 +149,7 @@ public class DynamoDBTableReplicator {
 	}
 
 	TableSchema fetchSourceSchema() {
-		TableSchema tableSchema = new TableSchema(dynamoTableName);
+		TableSchema tableSchema = new TableSchema(postgresTableName);
 
 		DescribeTableResult describeTableResult = dynamoDBClient.describeTable(dynamoTableName);
 		TableDescription tableDescription = describeTableResult.getTable();
